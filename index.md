@@ -10,7 +10,7 @@ This page lists exercises associated with Microsoft skilling content on [Microso
 
 ## Labs
 
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | where:"lab.islab", true | sort: "url" -%}
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | sort: "url" -%}
 {% assign current_module = "" -%}
 {% for activity in labs -%}
 {% assign relative_url = activity.url | remove: "/Instructions/Labs/" -%}
@@ -33,20 +33,5 @@ This page lists exercises associated with Microsoft skilling content on [Microso
 | --- | --- |
 {% endif -%}
 | [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) | {{ activity.lab.duration }} |
-{% endfor %}
-
-<hr>
-
-{% assign demos = site.pages | where_exp:"page", "page.url contains '/Instructions/Demos'" | where_exp:"page", "page.demo.title" %}
-{% for activity in demos %}
-{% if activity.demo.title %}
-
-### [{{ activity.demo.title }}]({{ site.github.url }}{{ activity.url }})
-
-{% if activity.demo.description %}
-*{{activity.demo.description}}*
-{% endif %}
-<hr>
-{% endif %}
 {% endfor %}
 
