@@ -4,22 +4,31 @@ permalink: index.html
 layout: home
 ---
 
-# Content Directory
+# MS-4010: Extend Microsoft 365 Copilot with declarative agents by using Visual Studio Code
 
-Hyperlinks to each of the lab exercises and demos are listed below.
+These are the lab exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com/training/paths/build-plugins-connectors-microsoft-copilot-microsoft-365/).
+
+<hr>
 
 ## Labs
 
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
-| Module | Lab |
-| --- | --- | 
-{% for activity in labs  %}| {{ activity.lab.module }} | [{{ activity.lab.title }}{% if activity.lab.type %} - {{ activity.lab.type }}{% endif %}]({{ site.github.url }}{{ activity.url }}) |
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | where:"lab.islab", true | sort: "url" %}
+| Module | Lab | Duration |
+| --- | --- | --- |
+{% for activity in labs %}| {{ activity.lab.module }} | [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) | {{ activity.lab.duration }} |
 {% endfor %}
+
+<hr>
 
 ## Demos
 
-{% assign demos = site.pages | where_exp:"page", "page.url contains '/Instructions/Demos'" %}
-| Module | Demo |
-| --- | --- | 
-{% for activity in demos  %}| {{ activity.demo.module }} | [{{ activity.demo.title }}]({{ site.github.url }}{{ activity.url }}) |
+{% assign demos = site.pages | where_exp:"page", "page.url contains '/Instructions/Demos'" | where_exp:"page", "page.demo.title" %}
+{% for activity in demos %}
+{% if activity.demo.title %}
+
+### [{{ activity.demo.title }}]({{ site.github.url }}{{ activity.url }})
+
+{% if activity.demo.module %}**Module**: {{ activity.demo.module }}{% endif %}
+<hr>
+{% endif %}
 {% endfor %}
