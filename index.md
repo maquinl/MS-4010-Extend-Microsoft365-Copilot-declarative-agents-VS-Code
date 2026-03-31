@@ -4,23 +4,38 @@ permalink: index.html
 layout: home
 ---
 
-# MS-4010: Extend Microsoft 365 Copilot with declarative agents by using Visual Studio Code
-
-These are the lab exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com/training/paths/build-plugins-connectors-microsoft-copilot-microsoft-365/).
+This page lists exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com/en-us/training/courses/ms-4010)
 
 <hr>
 
 ## Labs
 
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | where:"lab.islab", true | sort: "url" %}
-| Module | Lab | Duration |
-| --- | --- | --- |
-{% for activity in labs %}| {{ activity.lab.module }} | [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) | {{ activity.lab.duration }} |
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | where:"lab.islab", true | sort: "url" -%}
+{% assign current_module = "" -%}
+{% for activity in labs -%}
+{% assign relative_url = activity.url | remove: "/Instructions/Labs/" -%}
+{% assign module_folder = relative_url | split: "/" | first -%}
+{% if module_folder != current_module -%}
+{% assign current_module = module_folder -%}
+{% assign total_duration = 0 -%}
+{% for p in labs -%}
+{% assign p_rel = p.url | remove: "/Instructions/Labs/" -%}
+{% assign p_mod = p_rel | split: "/" | first -%}
+{% if p_mod == module_folder -%}
+{% assign d = p.lab.duration | split: " " | first | plus: 0 -%}
+{% assign total_duration = total_duration | plus: d -%}
+{% endif -%}
+{% endfor %}
+
+### {{ activity.lab.module }} ({{ total_duration }} min)
+
+| Lab | Duration |
+| --- | --- |
+{% endif -%}
+| [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) | {{ activity.lab.duration }} |
 {% endfor %}
 
 <hr>
-
-## Demos
 
 {% assign demos = site.pages | where_exp:"page", "page.url contains '/Instructions/Demos'" | where_exp:"page", "page.demo.title" %}
 {% for activity in demos %}
@@ -28,7 +43,10 @@ These are the lab exercises associated with Microsoft skilling content on [Micro
 
 ### [{{ activity.demo.title }}]({{ site.github.url }}{{ activity.url }})
 
-{% if activity.demo.module %}**Module**: {{ activity.demo.module }}{% endif %}
+{% if activity.demo.description %}
+*{{activity.demo.description}}*
+{% endif %}
 <hr>
 {% endif %}
 {% endfor %}
+
